@@ -1,0 +1,21 @@
+book_filename: "Series-de-tiempo"
+output_dir: docs
+edit: https://github.com/JACR052898/Series-de-tiempo/tree/Branch_1GC/edit/master/%s
+view: https://github.com/JACR052898/Series-de-tiempo/tree/Branch_1GC/blob/master/%s
+language:
+  ui:
+    chapter_name: "Capítulo "
+delete_merged_file: true
+
+
+rmd_files: [
+  #"index.Rmd"       # Índice del libro
+  "docs/Intro.Rmd",
+  "docs/01-capitulo-1.Rmd",  # Incluye todos los capítulos, usa la ruta relativa a docs si están en esa carpeta
+  "docs/02-capitulo-2.Rmd",
+  "docs/03-capitulo-3.Rmd",
+  # Agrega más capítulos aquí
+]
+
+output:
+  bookdown::gitbook: default

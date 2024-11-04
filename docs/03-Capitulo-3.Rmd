@@ -1,0 +1,61 @@
+# **DESCOMPOSICIÓN DE LA SERIE DE TIEMPO**
+
+## **Descomposición**
+
+```{r}
+ # Graficar la descomposición
+g3<-autoplot(descomposicion) +
+    labs(title = "Descomposición de la Serie de Tiempo IPC",
+         x = "Tiempo", y = "Valor") +
+    theme_minimal()
+ggplotly(g3)
+```
+
+La gráfica muestra la descomposición de una serie de tiempo del Índice de Precios al Consumidor (IPC), dividiéndola en cuatro componentes: tendencia (trend), estacionalidad (seasonal), residuo (remainder) y la serie original (data). Esta gráfica está compuesta por las siguientes partes:
+
+1. Serie Data Original
+Aquí se puede observar cómo ha variado el IPC . Se identifican periodos con picos y valles que indican cuando el IPC fue alto o bajo. Esta línea representa la suma de los componentes de tendencia, estacionalidad y residuo.
+
+2. Tendencia (Trend)
+La tendencia muestra los cambios a largo plazo en el IPC. Si se observa un incremento sostenido, significa que el IPC ha aumentado de manera consistente a lo largo del tiempo, mientras que una tendencia descendente indicaría lo contrario, esto refleja variaciones en la economía.
+
+3. Estacionalidad (Seasonal)
+Representa variaciones que se repiten a intervalos específicos. En esta gráfica, se ve un patrón claro y periódico, lo que sugiere que el IPC tiene un comportamiento cíclico que se repite todos los años o meses. Estos ciclos pueden estar asociados con factores estacionales como festividades, cambios climáticos o eventos recurrentes en la economía.
+
+4. Residuo (Remainder)
+El residuo refleja las fluctuaciones aleatorias y las irregularidades que no se pueden predecir. Si el residuo es pequeño y no muestra patrones obvios, indica que la descomposición ha capturado bien la estructura de la serie. Si, por el contrario, ves variaciones grandes e irregulares, podría significar que hay eventos no explicados que han influido en el IPC en ciertos momentos.
+
+
+
+## **Estacionariedad**
+
+```{r}
+# Cargar la librería necesaria para la prueba de Dickey-Fuller
+if(!require(tseries)) install.packages("tseries", dependencies = TRUE)
+library(tseries)
+
+# Aplicar la prueba de Dickey-Fuller Aumentada a la serie de tiempo
+resultado_adf <- adf.test(Indice_ts, alternative = "stationary") 
+
+# Imprimir el resultado de la prueba
+print(resultado_adf)
+
+# Interpretar el resultado
+if(resultado_adf$p.value < 0.05) {
+  cat("La serie es estacionaria con un nivel de significancia")
+}
+```
+
+### **Resultado prueba de estacionariedad**
+
+El resultado de la prueba de Dickey-Fuller Aumentada nos da como resultado:
+
+Estadístico de Dickey-Fuller: -4.1844
+Orden de Rezago (Lag order): 9
+Valor p (p-value): 0.01 
+
+Interpretación del Resultado
+Dado que el p-valor es 0.01, que es menor a 0.05, podemos rechazar la hipótesis nula de no estacionariedad. esto significa que:
+
+La serie es estacionaria al nivel de significancia del 5%.
+No es necesario aplicar diferenciación u otras transformaciones adicionales para hacer la serie estacionaria.

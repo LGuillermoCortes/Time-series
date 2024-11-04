@@ -1,0 +1,13 @@
+
+---
+title: "Propuesta series de tiempo"
+author: "Jhony Alejandro Cardenas Rojas, Luis Cortés Mojica, Isabel Fernández Acosta"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+output:
+  bookdown::gitbook:
+    df_print: paged
+---
+
+

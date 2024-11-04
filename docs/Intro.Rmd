@@ -1,0 +1,12 @@
+# SERIE DE TIEMPO
+
+
+La propuesta se enfocará en el análisis de la serie de tiempo de la variacion anual del Índice de Precios al Consumidor (IPC) en Colombia, suministrada por el DANE, la cual contiene datos desde el 1 de julio de 1955 hasta el 1 de octubre de 2024 con una frecuencia mensual. El IPC es un indicador clave para medir la variación de los precios de una canasta de bienes y servicios en el tiempo, y es fundamental para el análisis económico, la toma de decisiones políticas y la planificación financiera empresarial o personal.
+
+## **Referencia**
+
+DANE -  https://sitios.dane.gov.co/ipc/visorIPC/#!/
+
+## **Herramientas utilizadas**
+
+Para la publicación del libro Bookdown, se utiliza R-Studio como software editor e intermediario entre el repositorio creado en GitHub que a su vez permite la publicación del libro mediante un enlace web.

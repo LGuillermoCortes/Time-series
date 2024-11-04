@@ -1,0 +1,91 @@
+# **CARGA Y DESCRIPCIÓN DE LOS DATOS**
+
+
+## **Carga de los datos**
+
+Inicialmente se carga la base de datos que contiene la variable a estudiar.A continuación se muestra una breve visualización de la data.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+data <- read.csv(file = "Datos.csv", header = TRUE, sep = ",", fill = TRUE)
+```
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(ggplot2)
+library(forecast)
+library(zoo)
+library(grid)
+library(plotly)
+```
+
+```{r}
+glimpse(data)
+```
+
+
+## **Descripción de la base de datos**
+
+Como se puede observar en la anterior tabla, el dataset se compone de 7 variables y 832 registros.Todas las variables  identificadas como tipo caracter. 
+
+A continuación se define una tabla la cual indica el tipo de adecuado de cada una de las variables:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+Resumen_variables<-data.frame(
+  Variable= c("Mes","IPC","DTF","usura E.A.","usura M.V.","usura DTF","usura IPC"),
+  Tipo_variable= c("Fecha","Numerica","Numerica","Numerica","Numerica","Numerica","Numerica")
+  )
+print(Resumen_variables)
+```
+
+## **Pre-procesamiento de datos**
+
+Después del cargue y análisis descriptivo de la información, se identificó que los tipos de datos estaban incorrectos, pues eran de tipo caracter y se esperaba que fueran tipo fecha y numérico. Adicionalmente, se observan otras variables que no se van a utilizar durante el desarrollo de este proyecto, por consiguiente se procede a eliminarlas a traves del siguiente codigo:
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+data <- data[ , -c(3:7)]
+```
+
+También se observo que las variables tenian un nombre inadecuado, por lo tanto, se procede a renombrar las variables.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+colnames(data)<-c("Tiempo","IPC")
+```
+
+Posteriormente, se hace preprocesamiento de las variables, para poder convertir la data en serie de tiempo. Los cambios que se le aplicaron a los  datos fueron:
+
+-Se convierte la variable Tiempo a formato Fecha.
+-Se elimina el caracter % de la variable IPC.
+-Se cambia la "," por "." como separador de decimales.
+-Se convierte la variable IPC a tipo numérica.
+-Se eliminan datos faltantes en ambas variables.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Convertir la columna "Tiempo" a formato de fecha
+data$Tiempo <- as.Date(data$Tiempo, format = "%d/%m/%Y")
+
+# Remover el símbolo de porcentaje y reemplazar comas por puntos
+data$IPC <- gsub("%", "", data$IPC)  # Eliminar '%'
+data$IPC <- gsub(",", ".", data$IPC) # Reemplazar ',' por '.'
+
+# Convertir a numérico y dividir entre 100 para obtener el valor decimal
+data$IPC <- as.numeric(data$IPC) / 100
+
+# eliminar faltantes
+data <- data[!is.na(data$Tiempo) & !is.na(data$IPC), ] 
+```
+
+Después, se convierte la data en tipo serie de tiempo mediante la funcion ts. A continuación, se puede ver como los datos quedaron organizados en una matriz donde las filas son años y las columnas meses y el dato correspondiente se encuentra en el cruce de ambas.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+min_Tiempo <- min(data$Tiempo, na.rm = TRUE) #encontrar el minimo de la variable mes
+#convertir los datos en serie de tiempo
+Indice_ts <- ts(data$IPC, start = c(as.numeric(format(min_Tiempo, "%Y")), as.numeric(format(min_Tiempo, "%m"))), frequency = 12)
+print(Indice_ts) # imprimir datos
+```
+
+Luego de convertir los datos en serie de tiempo se realiza su descomposición para identificar los componenentes principales de la serie como la tendencia, estacionalidad y componente aleatorio (Residuos).
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Descomponer la serie
+  descomposicion <- decompose(Indice_ts)
+```

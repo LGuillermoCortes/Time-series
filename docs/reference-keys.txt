@@ -1,0 +1,14 @@
+serie-de-tiempo
+referencia
+herramientas-utilizadas
+carga-y-descripción-de-los-datos
+carga-de-los-datos
+descripción-de-la-base-de-datos
+pre-procesamiento-de-datos
+visualización-de-la-serie-de-tiempo-y-sus-componentes
+promedio-móvil
+rezago
+descomposición-de-la-serie-de-tiempo
+descomposición
+estacionariedad
+resultado-prueba-de-estacionariedad

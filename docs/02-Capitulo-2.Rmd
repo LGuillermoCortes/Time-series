@@ -1,0 +1,55 @@
+# **VISUALIZACIÓN DE LA SERIE DE TIEMPO Y SUS COMPONENTES**
+
+
+
+## **Promedio móvil**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# media móvil con k= periodo= 12
+data$PromedioMovil <- rollmean(data$IPC, k = 12, fill = NA, align = "right") 
+
+# Grafica promedio móvil
+g1<- ggplot(data, aes(x = Tiempo)) +
+  geom_line(aes(y = IPC, color = "IPC"), size = 0.8) +
+  geom_line(aes(y = PromedioMovil, color = "Promedio Móvil"), size = 0.8) +
+  labs(title = paste("Promedio Móvil de IPC (Ventana =", 12, "meses)"),
+       x = "Fecha", y = "IPC", color = "Leyenda") +
+  theme_minimal()
+ggplotly(g1)
+```
+
+La gráfica muestra dos series que representan la evolución del Índice de Precios al Consumidor (IPC) y su promedio móvil a lo largo del tiempo. A continuación, algunas interpretaciones:
+
+- Línea Roja (IPC): Esta línea representa los valores reales del IPC a lo largo del tiempo. Se puede observar que hay periodos de alta volatilidad con picos y caídas pronunciadas, lo que sugiere momentos de alta inflación seguidos de desaceleraciones.
+
+- Línea Azul (Promedio Móvil): El promedio móvil suaviza las fluctuaciones del IPC al promediar los valores de los 12 meses anteriores. Esto ayuda a identificar las tendencias generales a largo plazo y elimina el "ruido" de las fluctuaciones mensuales. Por ejemplo, se pueden ver tendencias sostenidas de aumento o disminución del IPC.
+
+Períodos Destacados:
+
+-Desde aproximadamente 1960 hasta 1980, hay picos elevados, lo que plantea periodos de inflación alta o inestabilidad económica.
+
+-Después del año 2000, las fluctuaciones parecen ser menores, con una caída sostenida en el IPC hasta 2020, indicando un período de estabilidad o control inflacionario.
+
+Diferencias entre las series:
+
+-Las desviaciones entre el IPC real y el promedio móvil son mayores en épocas de alta volatilidad. Esto indica que el promedio móvil tiende a suavizar los cambios bruscos, mientras que el IPC muestra las variaciones mensuales más evidentes.
+
+## **Rezago**
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# calculo del rezago
+data$Rezago <- dplyr::lag(data$IPC, n = 12)
+
+
+# Grafica del rezago
+
+g2<-lag.plot(Indice_ts,lag=12, do.lines = FALSE)
+
+ggplotly(g2)
+```
+
+Se puede interpretar que el IPC tiene una autocorrelación significativa en los rezagos más cortos (lag 1, lag 2, etc.), lo que indica que el IPC actual está muy relacionado con los valores recientes. Esta observación es útil para hacer pronósticos a corto plazo, dado que los valores recientes del IPC serán buenos indicadores de los valores futuros.
+
+A medida que el rezago aumenta (lag 6, lag 7, etc.), la dispersión de los puntos es más notable y menos concentrada en una línea recta. Esto puede ocasionar una disminución en la correlación entre el valor actual del IPC y sus valores más antiguos. En términos simples, el comportamiento del IPC hace 6 meses tiene menos influencia en el comportamiento del IPC actual comparado con valores más recientes.
+
+Para los rezagos más largos (como el lag 12), es probable que la relación sea menor, ya que otros factores pueden haber afectado el IPC en ese lapso de tiempo.
